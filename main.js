@@ -1,42 +1,20 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 console.log("#20. TypeScript homework example file");
-
-/*
- * #1
- *
- * Задача: Розробити функцію `createPerson`, яка створює об'єкт особи з заданими властивостями.
- *
- * Мета: Створити універсальну функцію, що дозволяє ефективно генерувати об'єкти особи з певними характеристиками для подальшого використання у програмі.
- *
- * Вимоги до реалізації:
- * 1. Функція має приймати три параметри: `name` (рядок), `age` (число), `isActive` (булеве значення) і явно повертати об'єкт, що відповідає інтерфейсу `PersonInterface`.
- * 2. Інтерфейс `PersonInterface` має описувати структуру об'єкта особи з властивостями `name`, `age`, і `isActive`.
- * 3. Функція має забезпечувати створення об'єкта з коректними типами властивостей відповідно до `PersonInterface`.
- * 4. Тип повернення функції має бути явно вказаний як `PersonInterface`, що забезпечує відповідність повернутого об'єкта визначеному інтерфейсу.
- *
- */
-
-interface PersonInterface {
-  name: string;
-  age: number;
-  isActive: boolean;
+function createPerson(name, age, isActive) {
+    return {
+        name,
+        age,
+        isActive,
+    };
 }
-
-function createPerson(
-  name: string,
-  age: number,
-  isActive: boolean
-): PersonInterface {
-  return {
-    name,
-    age,
-    isActive,
-  };
-}
-
 console.log("Task #1:");
 const newPerson = createPerson("Олександр", 31, false);
 console.log(newPerson);
-
 /*
  * #2
  *
@@ -52,46 +30,34 @@ console.log(newPerson);
  * 5. Всі виводи логів мають здійснюватись через `console.log`.
  *
  */
-
-function LogMethodCalls(
-  target: any,
-  propertyName: string,
-  propertyDescriptor: PropertyDescriptor
-): PropertyDescriptor {
-  const originalMethod = propertyDescriptor.value;
-
-  propertyDescriptor.value = function (...args: any[]) {
-    console.log(
-      `Calling "${propertyName}" with arguments: ${JSON.stringify(args)}`
-    );
-
-    return originalMethod.apply(this, args);
-  };
-
-  return propertyDescriptor;
+function LogMethodCalls(target, propertyName, propertyDescriptor) {
+    const originalMethod = propertyDescriptor.value;
+    propertyDescriptor.value = function (...args) {
+        console.log(`Calling "${propertyName}" with arguments: ${JSON.stringify(args)}`);
+        return originalMethod.apply(this, args);
+    };
+    return propertyDescriptor;
 }
-
 class Calculator {
-  @LogMethodCalls
-  add(a: number, b: number): number {
-    return a + b;
-  }
-
-  @LogMethodCalls
-  multiply(a: number, b: number): number {
-    return a * b;
-  }
+    add(a, b) {
+        return a + b;
+    }
+    multiply(a, b) {
+        return a * b;
+    }
 }
-
+__decorate([
+    LogMethodCalls
+], Calculator.prototype, "add", null);
+__decorate([
+    LogMethodCalls
+], Calculator.prototype, "multiply", null);
 console.log("Task #2:");
 const calculator = new Calculator();
-
 const sum = calculator.add(2, 3);
 console.log(`Result of add: ${sum}`);
-
 const product = calculator.multiply(3, 4);
 console.log(`Result of multiply: ${product}`);
-
 /*
  * #3
  *
@@ -106,27 +72,20 @@ console.log(`Result of multiply: ${product}`);
  * 4. Функція `generateId` має бути приватною всередині `UserProfile` і слугувати для генерації унікального ідентифікатора для кожного профілю.
  *
  */
-
-namespace UserProfile {
-  export interface ProfileInterface {
-    id: string;
-    name: string;
-    email: string;
-  }
-
-  function generateId(): string {
-    return Math.random().toString(36).substring(2, 11);
-  }
-
-  export function createProfile(name: string, email: string): ProfileInterface {
-    return {
-      id: generateId(),
-      name,
-      email,
-    };
-  }
-}
-
+var UserProfile;
+(function (UserProfile) {
+    function generateId() {
+        return Math.random().toString(36).substring(2, 11);
+    }
+    function createProfile(name, email) {
+        return {
+            id: generateId(),
+            name,
+            email,
+        };
+    }
+    UserProfile.createProfile = createProfile;
+})(UserProfile || (UserProfile = {}));
 console.log("Task #3");
 const profile = UserProfile.createProfile("John Doe", "john@example.com");
 console.log(profile);
